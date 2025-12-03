@@ -29,6 +29,7 @@ class AlbumBase(SQLModel):
 
 class Album(AlbumBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    cover_image_url: Optional[str] = None
     artist_id: Optional[int] = Field(default=None, foreign_key="artist.id")
     artist: Optional["Artist"] = Relationship(back_populates="albums")
     songs: List[Song] = Relationship(back_populates="album")
@@ -38,6 +39,7 @@ class AlbumCreate(AlbumBase):
 
 class AlbumRead(AlbumBase):
     id: int
+    cover_image_url: Optional[str] = None
     artist_id: Optional[int] = None
     songs: List[SongRead] = []
 
@@ -48,6 +50,7 @@ class ArtistBase(SQLModel):
 
 class Artist(ArtistBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    image_url: Optional[str] = None
     albums: List[Album] = Relationship(back_populates="artist")
     favorited_by: List["User"] = Relationship(back_populates="favorite_artists", link_model=UserArtistLink)
 
@@ -56,6 +59,7 @@ class ArtistCreate(ArtistBase):
 
 class ArtistRead(ArtistBase):
     id: int
+    image_url: Optional[str] = None
     albums: List[AlbumRead] = []
 
 
@@ -65,6 +69,7 @@ class UserBase(SQLModel):
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    profile_image_url: Optional[str] = None
     favorite_artists: List[Artist] = Relationship(back_populates="favorited_by", link_model=UserArtistLink)
 
 class UserCreate(UserBase):
@@ -72,4 +77,5 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
     id: int
+    profile_image_url: Optional[str] = None
     favorite_artists: List[ArtistRead] = []
