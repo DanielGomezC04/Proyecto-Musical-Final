@@ -8,7 +8,7 @@ class UserArtistLink(SQLModel, table=True):
 
 class SongBase(SQLModel):
     title: str
-    duration: int # en segundos
+    artist_name: str
 
 class Song(SongBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
