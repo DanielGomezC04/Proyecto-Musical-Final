@@ -1,5 +1,6 @@
 import os
 from supabase import create_client, Client
+import httpx
 from fastapi import UploadFile, HTTPException
 from ..config import get_settings
 import uuid
@@ -30,6 +31,33 @@ class StorageService:
             return public_url
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to upload file: {str(e)}")
+
+    @staticmethod
+    async def upload_from_url(url: str, bucket: str, path: str) -> str:
+        """
+        Download a file from a URL and upload it to Supabase Storage.
+        """
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(url)
+                if response.status_code != 200:
+                    raise HTTPException(status_code=400, detail="Failed to download image from URL")
+                
+                file_content = response.content
+                content_type = response.headers.get("content-type", "image/jpeg") # Default to jpeg if unknown
+
+            # Upload to Supabase
+            res = supabase.storage.from_(bucket).upload(
+                path=path,
+                file=file_content,
+                file_options={"content-type": content_type}
+            )
+            
+            # Get public URL
+            public_url = supabase.storage.from_(bucket).get_public_url(path)
+            return public_url
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to process URL upload: {str(e)}")
 
     @staticmethod
     def get_public_url(bucket: str, path: str) -> str:
