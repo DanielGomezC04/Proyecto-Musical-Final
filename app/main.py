@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from .database import create_db_and_tables
-from .routers import users, artists, albums, songs
+from .routers import users, artists, albums, songs, storage
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -14,6 +14,7 @@ app.include_router(users.router)
 app.include_router(artists.router)
 app.include_router(albums.router)
 app.include_router(songs.router)
+app.include_router(storage.router)
 
 @app.get("/")
 def read_root():
