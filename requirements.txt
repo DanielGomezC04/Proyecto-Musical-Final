@@ -5,3 +5,5 @@ supabase
 psycopg2-binary
 python-dotenv
 python-multipart
+pydantic-settings
+httpx
