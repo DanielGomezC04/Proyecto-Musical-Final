@@ -20,8 +20,8 @@ def create_user(user: UserCreate, session: Session = Depends(get_session)):
     return db_user
 
 @router.get("/", response_model=List[UserRead])
-def read_users(offset: int = 0, limit: int = 100, session: Session = Depends(get_session)):
-    users = session.exec(select(User).offset(offset).limit(limit)).all()
+def read_users(session: Session = Depends(get_session)):
+    users = session.exec(select(User)).all()
     return users
 
 @router.get("/{user_id}", response_model=UserRead)

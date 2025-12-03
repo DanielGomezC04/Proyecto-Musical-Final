@@ -20,8 +20,8 @@ def create_artist(artist: ArtistCreate, session: Session = Depends(get_session))
     return db_artist
 
 @router.get("/", response_model=List[ArtistRead])
-def read_artists(offset: int = 0, limit: int = 100, session: Session = Depends(get_session)):
-    artists = session.exec(select(Artist).offset(offset).limit(limit)).all()
+def read_artists(session: Session = Depends(get_session)):
+    artists = session.exec(select(Artist)).all()
     return artists
 
 @router.get("/{artist_id}", response_model=ArtistRead)

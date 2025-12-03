@@ -20,8 +20,8 @@ def create_album(album: AlbumCreate, session: Session = Depends(get_session)):
     return db_album
 
 @router.get("/", response_model=List[AlbumRead])
-def read_albums(offset: int = 0, limit: int = 100, session: Session = Depends(get_session)):
-    albums = session.exec(select(Album).offset(offset).limit(limit)).all()
+def read_albums(session: Session = Depends(get_session)):
+    albums = session.exec(select(Album)).all()
     return albums
 
 @router.get("/{album_id}", response_model=AlbumRead)

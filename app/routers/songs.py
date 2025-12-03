@@ -20,8 +20,8 @@ def create_song(song: SongCreate, session: Session = Depends(get_session)):
     return db_song
 
 @router.get("/", response_model=List[SongRead])
-def read_songs(offset: int = 0, limit: int = 100, session: Session = Depends(get_session)):
-    songs = session.exec(select(Song).offset(offset).limit(limit)).all()
+def read_songs(session: Session = Depends(get_session)):
+    songs = session.exec(select(Song)).all()
     return songs
 
 @router.get("/{song_id}", response_model=SongRead)

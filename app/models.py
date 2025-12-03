@@ -16,10 +16,11 @@ class Song(SongBase, table=True):
     album: Optional["Album"] = Relationship(back_populates="songs")
 
 class SongCreate(SongBase):
-    pass
+    album_id: Optional[int] = None
 
 class SongRead(SongBase):
     id: int
+    album_id: Optional[int] = None
 
 
 class AlbumBase(SQLModel):
@@ -33,10 +34,11 @@ class Album(AlbumBase, table=True):
     songs: List[Song] = Relationship(back_populates="album")
 
 class AlbumCreate(AlbumBase):
-    pass
+    artist_id: Optional[int] = None
 
 class AlbumRead(AlbumBase):
     id: int
+    artist_id: Optional[int] = None
     songs: List[SongRead] = []
 
 
