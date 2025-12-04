@@ -49,7 +49,6 @@ En render con `https://spotlist-6xna.onrender.com/songs/`.
 ### Backend
 - **FastAPI** - Framework web moderno y rápido
 - **SQLModel** - ORM basado en Pydantic y SQLAlchemy
-- **SQLite** - Base de datos (desarrollo)
 - **Uvicorn** - Servidor ASGI
 
 ### Frontend
@@ -58,10 +57,7 @@ En render con `https://spotlist-6xna.onrender.com/songs/`.
 
 ### Servicios Externos
 - **Cloudinary** - Almacenamiento de imágenes
-
-## Modelos de Datos
-
-### Diagrama de Relaciones
+- **Render** - Base de datos
 
 ```
 ```
