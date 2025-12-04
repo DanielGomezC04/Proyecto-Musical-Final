@@ -42,7 +42,7 @@ uvicorn app.main:app --reload
 ```
 La API estará disponible en `http://127.0.0.1:8000`.
 El API de documentación estará en `http://127.0.0.1:8000/docs`.
-En render con `https://spotlist-6xna.onrender.com/songs/`.
+En render con `https://spotlist-6xna.onrender.com/`.
 
 ## Tecnologías
 
