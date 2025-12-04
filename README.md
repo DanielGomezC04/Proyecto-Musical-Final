@@ -44,130 +44,102 @@ La API estará disponible en `http://127.0.0.1:8000`.
 El API de documentación estará en `http://127.0.0.1:8000/docs`.
 En render con `https://spotlist-6xna.onrender.com/songs/`.
 
-##  Características
+## Tecnologías
 
--  CRUD Completo para **Usuarios**, **Artistas**, **Álbumes** y **Canciones**
--  Sistema de **Favoritos** (Usuarios ↔ Artistas / Usuarios ↔ Canciones)
--  Carga de imágenes con **Cloudinary**
--  Interfaz web con **HTML + Jinja2**
--  API REST documentada automáticamente
--  Base de datos relacional con **SQLModel**
+### Backend
+- **FastAPI** - Framework web moderno y rápido
+- **SQLModel** - ORM basado en Pydantic y SQLAlchemy
+- **SQLite** - Base de datos (desarrollo)
+- **Uvicorn** - Servidor ASGI
+
+### Frontend
+- **Jinja2** - Motor de templates
+- **HTML/CSS** - Interfaz de usuario
+
+### Servicios Externos
+- **Cloudinary** - Almacenamiento de imágenes
+
+## Modelos de Datos
+
+### Diagrama de Relaciones
+
+```
+```
+
+## Endpoints API
+
+### Usuarios
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/users/` | Lista todos los usuarios |
+| `GET` | `/users/{user_id}` | Obtiene un usuario específico |
+| `GET` | `/users/create` | Formulario de creación |
+| `POST` | `/users/create` | Crea un nuevo usuario |
+| `POST` | `/users/{user_id}/delete` | Elimina un usuario |
+
+### Favoritos
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST` | `/users/{user_id}/favorites/{artist_id}` | Agrega artista a favoritos |
+| `POST` | `/users/{user_id}/favorites/{artist_id}/delete` | Elimina artista de favoritos |
+| `POST` | `/users/{user_id}/favorites/songs/{song_id}` | Agrega canción a favoritos |
+| `POST` | `/users/{user_id}/favorites/songs/{song_id}/delete` | Elimina canción de favoritos |
+
+### Artistas
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/artists/` | Lista todos los artistas |
+| `GET` | `/artists/{artist_id}` | Obtiene un artista específico |
+| `GET` | `/artists/create` | Formulario de creación |
+| `POST` | `/artists/create` | Crea un nuevo artista |
+| `POST` | `/artists/{artist_id}/delete` | Elimina un artista |
+
+### Álbumes
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/albums/` | Lista todos los álbumes |
+| `GET` | `/albums/{album_id}` | Obtiene un álbum específico |
+| `GET` | `/albums/create` | Formulario de creación |
+| `POST` | `/albums/create` | Crea un nuevo álbum |
+| `POST` | `/albums/{album_id}/delete` | Elimina un álbum |
+
+### Canciones
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET` | `/songs/` | Lista todas las canciones |
+| `GET` | `/songs/{song_id}` | Obtiene una canción específica |
+| `GET` | `/songs/create` | Formulario de creación |
+| `POST` | `/songs/create` | Crea una nueva canción |
+| `POST` | `/songs/{song_id}/delete` | Elimina una canción |
+
+## Despliegue
+
+### Render
+
+1. **Crear cuenta en [Render](https://render.com/)**
+
+2. **Crear nuevo Web Service**
+   - Conectar repositorio de GitHub
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+
+3. **Desplegar**
+   - Render automáticamente desplegará la aplicación
+
+### Consideraciones de Producción
+
+- **Base de datos**: SQLite para desarrollo, considerar PostgreSQL para producción
+- **Imágenes**: Cloudinary maneja el almacenamiento en la nube
+- **HTTPS**: Render proporciona certificados SSL automáticos
+
+## Desarrollado por
+
+**Daniel Felipe Gomez Cordoba**
+- GitHub: [@DanielGomezC04](https://github.com/DanielGomezC04)
 
 ---
-
-##  Tecnologías
-
-###  Backend
-- FastAPI  
-- SQLModel  
-- SQLite  
-- Uvicorn  
-
-###  Frontend
-- Jinja2  
-- HTML / CSS  
-
-###  Servicios externos
-- Cloudinary  
-
----
-Usuarios
-Método	Endpoint	Descripción
-GET	/users/	Listar usuarios
-GET	/users/{id}	Obtener usuario
-GET	/users/create	Formulario
-POST	/users/create	Crear usuario
-POST	/users/{id}/delete	Eliminar usuario
-
-Método	Endpoint	Descripción
-POST	/users/{id}/favorites/{artist_id}	Agregar artista
-POST	/users/{id}/favorites/{artist_id}/delete	Quitar artista
-POST	/users/{id}/favorites/songs/{song_id}	Agregar canción
-POST	/users/{id}/favorites/songs/{song_id}/delete	Quitar canción
-
- Artistas
-Método	Endpoint	Descripción
-GET	/artists/	Listar artistas
-GET	/artists/{id}	Obtener artista
-GET	/artists/create	Formulario
-POST	/artists/create	Crear artista
-POST	/artists/{id}/delete	Eliminar artista
-
- Álbumes
-Método	Endpoint	Descripción
-GET	/albums/	Listar álbumes
-GET	/albums/{id}	Obtener álbum
-GET	/albums/create	Formulario
-POST	/albums/create	Crear álbum
-POST	/albums/{id}/delete	Eliminar álbum
-
- Canciones
-Método	Endpoint	Descripción
-GET	/songs/	Listar canciones
-GET	/songs/{id}	Obtener canción
-GET	/songs/create	Formulario
-POST	/songs/create	Crear canción
-POST	/songs/{id}/delete	Eliminar canción
-
- Instalación
-1️⃣ Clonar
-bash
-Copiar código
-git clone <repo-url>
-cd Spotlist
-2️⃣ Crear entorno
-bash
-Copiar código
-python -m venv venv
-3️⃣ Activar
-Windows:
-
-bash
-Copiar código
-.\venv\Scripts\activate
-Linux/Mac:
-
-bash
-Copiar código
-source venv/bin/activate
-4️⃣ Instalar dependencias
-bash
-Copiar código
-pip install -r requirements.txt
- Configuración
-Crear archivo .env:
-
-env
-Copiar código
-database_url="sqlite:///./database.db"
-
-cloudinary_cloud_name="your_cloud"
-cloudinary_api_key="your_key"
-cloudinary_api_secret="your_secret"
- Uso
-Iniciar servidor
-bash
-Copiar código
-uvicorn app.main:app --reload
-Accesos
- Web: http://localhost:8000
-
- API Docs: http://localhost:8000/docs
-
- Redoc: http://localhost:8000/redoc
-
- Despliegue en Render
-Build Command:
-
-bash
-Copiar código
-pip install -r requirements.txt
-Start Command:
-
-bash
-Copiar código
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
-
- Desarrollado por
-Daniel Felipe Gomez Cordoba
-GitHub: @DanielGomezC04
