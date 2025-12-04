@@ -21,17 +21,14 @@ async def upload_image(file: UploadFile, bucket_name: str = "images") -> str:
         return None
     
     try:
-        # Read file content
         file_content = await file.read()
         
-        # Upload to Cloudinary with folder organization
         result = cloudinary.uploader.upload(
             file_content,
             folder=bucket_name,
             resource_type="auto"
         )
         
-        # Return the secure URL
         return result.get('secure_url')
     except Exception as e:
         print(f"Error uploading to Cloudinary: {e}")

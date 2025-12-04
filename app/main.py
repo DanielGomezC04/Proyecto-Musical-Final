@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from .database import create_db_and_tables
 from .routers import users, artists, albums, songs, storage
 
-# Configure templates
+
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 @asynccontextmanager
