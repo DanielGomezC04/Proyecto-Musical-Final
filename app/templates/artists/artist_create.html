@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Artista - Proyecto Musical{% endblock %}
+
+{% block content %}
+<h1>Crear Nuevo Artista</h1>
+
+<form action="/artists/create" method="post">
+    <label for="name">Nombre:</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="genre">Género:</label><br>
+    <input type="text" id="genre" name="genre" required><br><br>
+
+    <button type="submit">Crear Artista</button>
+</form>
+
+<br>
+<a href="/artists/">Volver a la lista de artistas</a>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle Usuario - Proyecto Musical{% endblock %}
+
+{% block content %}
+<h1>Detalle de Usuario</h1>
+<p><strong>ID:</strong> {{ user.id }}</p>
+<p><strong>Username:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+
+<h2>Artistas Favoritos</h2>
+<ul>
+    {% for artist in user.favorite_artists %}
+    <li><a href="/artists/{{ artist.id }}">{{ artist.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<a href="/users">Volver a la lista</a>
+{% endblock %}

@@ -1,9 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request, Form
+from fastapi.responses import HTMLResponse
 from sqlmodel import Session, select
 from typing import List
+from pathlib import Path
+from fastapi.templating import Jinja2Templates
 
 from ..database import get_session
-from ..models import Album, AlbumCreate, AlbumRead
+from ..models import Album, AlbumCreate, AlbumRead, Artist
+
+# Configure templates
+templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
 
 router = APIRouter(
     prefix="/albums",
@@ -19,14 +25,38 @@ def create_album(album: AlbumCreate, session: Session = Depends(get_session)):
     session.refresh(db_album)
     return db_album
 
-@router.get("/", response_model=List[AlbumRead])
-def read_albums(session: Session = Depends(get_session)):
+@router.get("/", response_class=HTMLResponse)
+def read_albums(request: Request, session: Session = Depends(get_session)):
     albums = session.exec(select(Album)).all()
-    return albums
+    return templates.TemplateResponse("albums/album_list.html", {"request": request, "albums": albums})
 
-@router.get("/{album_id}", response_model=AlbumRead)
-def read_album(album_id: int, session: Session = Depends(get_session)):
+@router.get("/create", response_class=HTMLResponse)
+def create_album_form(request: Request, session: Session = Depends(get_session)):
+    artists = session.exec(select(Artist)).all()
+    return templates.TemplateResponse("albums/album_create.html", {"request": request, "artists": artists})
+
+@router.post("/create", response_class=HTMLResponse)
+def create_album(
+    request: Request,
+    name: str = Form(...),
+    year: int = Form(...),
+    artist_id: int = Form(...),
+    session: Session = Depends(get_session)
+):
+    album_data = AlbumCreate(name=name, year=year, artist_id=artist_id)
+    db_album = Album.model_validate(album_data)
+    
+    session.add(db_album)
+    session.commit()
+    session.refresh(db_album)
+
+    return templates.TemplateResponse("albums/album_detail.html", {"request": request, "album": db_album})
+
+@router.get("/{album_id}", response_class=HTMLResponse)
+def read_album(album_id: int, request: Request, session: Session = Depends(get_session)):
     album = session.get(Album, album_id)
     if not album:
         raise HTTPException(status_code=404, detail="Album not found")
-    return album
+    return templates.TemplateResponse("albums/album_detail.html", {"request": request, "album": album})
+
+

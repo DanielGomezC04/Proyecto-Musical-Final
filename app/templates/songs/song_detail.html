@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle Canción - Proyecto Musical{% endblock %}
+
+{% block content %}
+<h1>Detalle de Canción</h1>
+<p><strong>ID:</strong> {{ song.id }}</p>
+<p><strong>Nombre:</strong> {{ song.name }}</p>
+<p><strong>Duración:</strong> {{ song.duration }} segundos</p>
+<p><strong>Álbum:</strong> <a href="/albums/{{ song.album_id }}">Ver Álbum</a></p>
+
+<a href="/songs">Volver a la lista</a>
+{% endblock %}

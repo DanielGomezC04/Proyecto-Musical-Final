@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle Artista - Proyecto Musical{% endblock %}
+
+{% block content %}
+<h1>Detalle de Artista</h1>
+<p><strong>ID:</strong> {{ artist.id }}</p>
+<p><strong>Nombre:</strong> {{ artist.name }}</p>
+<p><strong>Género:</strong> {{ artist.genre }}</p>
+
+<h2>Álbumes</h2>
+<ul>
+    {% for album in artist.albums %}
+    <li><a href="/albums/{{ album.id }}">{{ album.name }}</a> ({{ album.year }})</li>
+    {% endfor %}
+</ul>
+
+<a href="/artists">Volver a la lista</a>
+{% endblock %}

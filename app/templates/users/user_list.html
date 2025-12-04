@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Usuarios - Proyecto Musical{% endblock %}
+
+{% block content %}
+<h1>Usuarios</h1>
+<a href="/users/create" class="button">Crear Nuevo Usuario</a>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td><a href="/users/{{ user.id }}">Ver Detalles</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

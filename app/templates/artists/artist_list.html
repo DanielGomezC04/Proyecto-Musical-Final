@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Artistas - Proyecto Musical{% endblock %}
+
+{% block content %}
+<h1>Artistas</h1>
+<a href="/artists/create" class="button">Crear Nuevo Artista</a>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Género</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for artist in artists %}
+        <tr>
+            <td>{{ artist.id }}</td>
+            <td>{{ artist.name }}</td>
+            <td>{{ artist.genre }}</td>
+            <td><a href="/artists/{{ artist.id }}">Ver Detalles</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

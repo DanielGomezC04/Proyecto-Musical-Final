@@ -3,7 +3,7 @@ from .config import get_settings
 
 settings = get_settings()
 
-engine = create_engine(settings.database_url, echo=True)
+engine = create_engine(settings.database_url)
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)

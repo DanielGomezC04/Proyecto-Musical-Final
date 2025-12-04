@@ -1,9 +1,7 @@
 fastapi
 uvicorn
 sqlmodel
-supabase
-psycopg2-binary
-python-dotenv
-python-multipart
 pydantic-settings
+jinja2
+python-multipart
 httpx
