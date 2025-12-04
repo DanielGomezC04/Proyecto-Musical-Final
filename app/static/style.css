@@ -286,3 +286,85 @@ a {
 a:hover {
   color: var(--accent-hover);
 }
+
+/* HERO SECTION */
+.hero-section {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(180deg, #2a2a2a 0%, var(--bg-main) 100%);
+  margin-bottom: 40px;
+  border-radius: var(--radius);
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  background: linear-gradient(90deg, #fff, #b3b3b3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 24px;
+  padding-left: 8px;
+  border-left: 4px solid var(--accent);
+}
+
+/* INTERACTIVE CARDS */
+.interactive-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 24px;
+  background: var(--bg-card);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.interactive-card:hover {
+  transform: translateY(-8px);
+  background: var(--bg-card-soft);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent);
+}
+
+.card-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+/* FOOTER */
+footer {
+  margin-top: 80px;
+  padding: 40px 0;
+  border-top: 1px solid #222;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.footer-content p {
+  margin-bottom: 8px;
+}
+
+.footer-content a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-content a:hover {
+  text-decoration: underline;
+}

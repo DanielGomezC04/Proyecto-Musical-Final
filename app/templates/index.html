@@ -3,45 +3,41 @@
 {% block title %}Inicio - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Bienvenido a la API del Proyecto Musical</h1>
-
-<p>Esta es una aplicación de gestión musical que te permite administrar usuarios, artistas, álbumes y canciones.</p>
+<div class="hero-section">
+  <h1 class="hero-title">Bienvenido a Spotlist</h1>
+  <p class="hero-subtitle">Gestiona tu música favorita, artistas y álbumes en un solo lugar.</p>
+</div>
 
 <div class="section">
-  <h2>Secciones Disponibles</h2>
+  <h2 class="section-title">Explora tu Música</h2>
   <div class="card-grid">
-    <div class="card">
+    <div class="card interactive-card">
+      <div class="card-icon">👤</div>
       <h3>Usuarios</h3>
-      <p>Gestiona los usuarios de la plataforma y sus artistas favoritos.</p>
+      <p>Gestiona perfiles y favoritos.</p>
       <a href="/users/" class="button">Ver Usuarios</a>
     </div>
 
-    <div class="card">
+    <div class="card interactive-card">
+      <div class="card-icon">🎤</div>
       <h3>Artistas</h3>
-      <p>Explora y administra artistas musicales y sus álbumes.</p>
+      <p>Descubre nuevos talentos.</p>
       <a href="/artists/" class="button">Ver Artistas</a>
     </div>
 
-    <div class="card">
+    <div class="card interactive-card">
+      <div class="card-icon">💿</div>
       <h3>Álbumes</h3>
-      <p>Consulta álbumes musicales y sus canciones.</p>
+      <p>Explora colecciones completas.</p>
       <a href="/albums/" class="button">Ver Álbumes</a>
     </div>
 
-    <div class="card">
+    <div class="card interactive-card">
+      <div class="card-icon">🎵</div>
       <h3>Canciones</h3>
-      <p>Navega por el catálogo completo de canciones.</p>
+      <p>Escucha tus tracks preferidos.</p>
       <a href="/songs/" class="button">Ver Canciones</a>
     </div>
   </div>
-</div>
-
-<div class="muted-box">
-  <h3>API Documentation</h3>
-  <p>Accede a la documentación interactiva de la API:</p>
-  <ul>
-    <li><a href="/docs">Swagger UI</a> - Interfaz interactiva</li>
-    <li><a href="/redoc">ReDoc</a> - Documentación alternativa</li>
-  </ul>
 </div>
 {% endblock %}
