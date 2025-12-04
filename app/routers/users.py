@@ -6,7 +6,7 @@ from pathlib import Path
 from fastapi.templating import Jinja2Templates
 
 from ..database import get_session
-from ..models import User, UserCreate, UserRead, Artist, UserArtistLink
+from ..models import User, UserCreate, UserRead, Artist, UserArtistLink, Song, UserSongLink
 from ..utils import upload_image
 
 # Configure templates
@@ -60,10 +60,20 @@ def read_user(user_id: int, request: Request, session: Session = Depends(get_ses
     user = session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return templates.TemplateResponse("users/user_detail.html", {"request": request, "user": user})
+    
+    # Fetch all artists and songs for the favorites dropdowns
+    all_artists = session.exec(select(Artist)).all()
+    all_songs = session.exec(select(Song)).all()
+    
+    return templates.TemplateResponse("users/user_detail.html", {
+        "request": request, 
+        "user": user,
+        "all_artists": all_artists,
+        "all_songs": all_songs
+    })
 
-@router.post("/{user_id}/favorites/{artist_id}", response_model=UserRead)
-def add_favorite_artist(user_id: int, artist_id: int, session: Session = Depends(get_session)):
+@router.post("/{user_id}/favorites/{artist_id}", response_class=HTMLResponse)
+def add_favorite_artist(user_id: int, artist_id: int, request: Request, session: Session = Depends(get_session)):
     user = session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -72,18 +82,17 @@ def add_favorite_artist(user_id: int, artist_id: int, session: Session = Depends
     if not artist:
         raise HTTPException(status_code=404, detail="Artist not found")
     
+    if artist not in user.favorite_artists:
+        user.favorite_artists.append(artist)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
     
-    if artist in user.favorite_artists:
-        return user
+    # Redirect to users list
+    return read_users(request, session)
 
-    user.favorite_artists.append(artist)
-    session.add(user)
-    session.commit()
-    session.refresh(user)
-    return user
-
-@router.delete("/{user_id}/favorites/{artist_id}", response_model=UserRead)
-def remove_favorite_artist(user_id: int, artist_id: int, session: Session = Depends(get_session)):
+@router.delete("/{user_id}/favorites/{artist_id}", response_class=HTMLResponse)
+def remove_favorite_artist(user_id: int, artist_id: int, request: Request, session: Session = Depends(get_session)):
     user = session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -97,8 +106,57 @@ def remove_favorite_artist(user_id: int, artist_id: int, session: Session = Depe
         session.add(user)
         session.commit()
         session.refresh(user)
-        
-    return user
+    
+    # Redirect to users list
+    return read_users(request, session)
+
+@router.post("/{user_id}/favorites/{artist_id}/delete", response_class=HTMLResponse)
+def delete_favorite_artist(user_id: int, artist_id: int, request: Request, session: Session = Depends(get_session)):
+    """POST endpoint for deleting favorite artist (HTML form compatible)"""
+    return remove_favorite_artist(user_id, artist_id, request, session)
+
+@router.post("/{user_id}/favorites/songs/{song_id}", response_class=HTMLResponse)
+def add_favorite_song(user_id: int, song_id: int, request: Request, session: Session = Depends(get_session)):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    song = session.get(Song, song_id)
+    if not song:
+        raise HTTPException(status_code=404, detail="Song not found")
+    
+    if song not in user.favorite_songs:
+        user.favorite_songs.append(song)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+    
+    # Redirect to users list
+    return read_users(request, session)
+
+@router.post("/{user_id}/favorites/songs/{song_id}/delete", response_class=HTMLResponse)
+def delete_favorite_song(user_id: int, song_id: int, request: Request, session: Session = Depends(get_session)):
+    """POST endpoint for deleting favorite song (HTML form compatible)"""
+    return remove_favorite_song(user_id, song_id, request, session)
+
+@router.delete("/{user_id}/favorites/songs/{song_id}", response_class=HTMLResponse)
+def remove_favorite_song(user_id: int, song_id: int, request: Request, session: Session = Depends(get_session)):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    song = session.get(Song, song_id)
+    if not song:
+        raise HTTPException(status_code=404, detail="Song not found")
+    
+    if song in user.favorite_songs:
+        user.favorite_songs.remove(song)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+    
+    # Redirect to users list
+    return read_users(request, session)
 
 
 

@@ -7,8 +7,8 @@
   <h1 class="page-title">Detalle de Usuario</h1>
 
   {% if user.image_url %}
-    <img src="{{ user.image_url }}" alt="Foto de {{ user.username }}" class="cover-img-lg">
-    <br><br>
+  <img src="{{ user.image_url }}" alt="Foto de {{ user.username }}" class="cover-img-lg">
+  <br><br>
   {% endif %}
 
   <p><strong>ID:</strong> {{ user.id }}</p>
@@ -18,9 +18,48 @@
   <h2>Artistas Favoritos</h2>
   <ul>
     {% for artist in user.favorite_artists %}
-    <li><a href="/artists/{{ artist.id }}">{{ artist.name }}</a></li>
+    <li><a href="/artists/{{ artist.id }}">{{ artist.name }}</a>
+      <form action="/users/{{ user.id }}/favorites/{{ artist.id }}/delete" method="post" style="display:inline;">
+        <button type="submit" class="button-small">Eliminar</button>
+      </form>
+    </li>
     {% endfor %}
   </ul>
+
+  <h3>Agregar Artista Favorito</h3>
+  <form action="" method="post"
+    onsubmit="this.action = '/users/{{ user.id }}/favorites/' + document.getElementById('artist_select').value">
+    <select id="artist_select" required>
+      <option value="">Seleccionar Artista</option>
+      {% for artist in all_artists %}
+      <option value="{{ artist.id }}">{{ artist.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="button">Agregar</button>
+  </form>
+
+  <h2>Canciones Favoritas</h2>
+  <ul>
+    {% for song in user.favorite_songs %}
+    <li><a href="/songs/{{ song.id }}">{{ song.name }}</a>
+      <form action="/users/{{ user.id }}/favorites/songs/{{ song.id }}/delete" method="post" style="display:inline;">
+        <button type="submit" class="button-small">Eliminar</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <h3>Agregar Canción Favorita</h3>
+  <form action="" method="post"
+    onsubmit="this.action = '/users/{{ user.id }}/favorites/songs/' + document.getElementById('song_select').value">
+    <select id="song_select" required>
+      <option value="">Seleccionar Canción</option>
+      {% for song in all_songs %}
+      <option value="{{ song.id }}">{{ song.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="button">Agregar</button>
+  </form>
 </div>
 
 <br>

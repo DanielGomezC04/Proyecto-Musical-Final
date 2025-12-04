@@ -6,7 +6,7 @@ from pathlib import Path
 from fastapi.templating import Jinja2Templates
 
 from ..database import get_session
-from ..models import Song, SongCreate, SongRead, Album
+from ..models import Song, SongCreate, SongRead, Album, User
 
 # Configure templates
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
@@ -57,7 +57,15 @@ def read_song(song_id: int, request: Request, session: Session = Depends(get_ses
     song = session.get(Song, song_id)
     if not song:
         raise HTTPException(status_code=404, detail="Song not found")
-    return templates.TemplateResponse("songs/song_detail.html", {"request": request, "song": song})
+    
+    # Fetch all users for the favorites dropdown
+    users = session.exec(select(User)).all()
+    
+    return templates.TemplateResponse("songs/song_detail.html", {
+        "request": request, 
+        "song": song,
+        "users": users
+    })
 
 
 

@@ -6,7 +6,7 @@ from pathlib import Path
 from fastapi.templating import Jinja2Templates
 
 from ..database import get_session
-from ..models import Artist, ArtistCreate, ArtistRead
+from ..models import Artist, ArtistCreate, ArtistRead, User
 from ..utils import upload_image
 
 # Configure templates
@@ -59,7 +59,15 @@ def read_artist(artist_id: int, request: Request, session: Session = Depends(get
     artist = session.get(Artist, artist_id)
     if not artist:
         raise HTTPException(status_code=404, detail="Artist not found")
-    return templates.TemplateResponse("artists/artist_detail.html", {"request": request, "artist": artist})
+    
+    # Fetch all users for the favorites dropdown
+    users = session.exec(select(User)).all()
+    
+    return templates.TemplateResponse("artists/artist_detail.html", {
+        "request": request, 
+        "artist": artist,
+        "users": users
+    })
 
 
 

@@ -6,6 +6,10 @@ class UserArtistLink(SQLModel, table=True):
     user_id: Optional[int] = Field(default=None, foreign_key="user.id", primary_key=True)
     artist_id: Optional[int] = Field(default=None, foreign_key="artist.id", primary_key=True)
 
+class UserSongLink(SQLModel, table=True):
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id", primary_key=True)
+    song_id: Optional[int] = Field(default=None, foreign_key="song.id", primary_key=True)
+
 # Song Models
 class SongBase(SQLModel):
     name: str
@@ -15,6 +19,7 @@ class SongBase(SQLModel):
 class Song(SongBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     album: Optional["Album"] = Relationship(back_populates="songs")
+    fans: List["User"] = Relationship(back_populates="favorite_songs", link_model=UserSongLink)
 
 class SongCreate(SongBase):
     pass
@@ -67,6 +72,7 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     favorite_artists: List[Artist] = Relationship(back_populates="fans", link_model=UserArtistLink)
+    favorite_songs: List[Song] = Relationship(back_populates="fans", link_model=UserSongLink)
     image_url: Optional[str] = Field(default=None)
 
 class UserCreate(UserBase):
@@ -75,3 +81,4 @@ class UserCreate(UserBase):
 class UserRead(UserBase):
     id: int
     favorite_artists: List[ArtistRead] = []
+    favorite_songs: List[SongRead] = []
