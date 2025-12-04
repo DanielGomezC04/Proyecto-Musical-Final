@@ -49,7 +49,6 @@ En render con `https://spotlist-6xna.onrender.com/songs/`.
 ### Backend
 - **FastAPI** - Framework web moderno y rápido
 - **SQLModel** - ORM basado en Pydantic y SQLAlchemy
-- **Uvicorn** - Servidor ASGI
 
 ### Frontend
 - **Jinja2** - Motor de templates
