@@ -64,3 +64,14 @@ def read_album(album_id: int, request: Request, session: Session = Depends(get_s
     return templates.TemplateResponse("albums/album_detail.html", {"request": request, "album": album})
 
 
+
+@router.post("/{album_id}/delete", response_class=HTMLResponse)
+def delete_album(album_id: int, request: Request, session: Session = Depends(get_session)):
+    album = session.get(Album, album_id)
+    if not album:
+        raise HTTPException(status_code=404, detail="Album not found")
+    
+    session.delete(album)
+    session.commit()
+    
+    return read_albums(request, session)

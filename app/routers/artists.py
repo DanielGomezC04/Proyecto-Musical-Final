@@ -62,3 +62,14 @@ def read_artist(artist_id: int, request: Request, session: Session = Depends(get
     return templates.TemplateResponse("artists/artist_detail.html", {"request": request, "artist": artist})
 
 
+
+@router.post("/{artist_id}/delete", response_class=HTMLResponse)
+def delete_artist(artist_id: int, request: Request, session: Session = Depends(get_session)):
+    artist = session.get(Artist, artist_id)
+    if not artist:
+        raise HTTPException(status_code=404, detail="Artist not found")
+    
+    session.delete(artist)
+    session.commit()
+    
+    return read_artists(request, session)

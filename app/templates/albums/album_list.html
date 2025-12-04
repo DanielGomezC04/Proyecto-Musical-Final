@@ -35,6 +35,9 @@
       <td>{{ album.artist_id }}</td>
       <td>
         <a href="/albums/{{ album.id }}" class="button">Ver Detalles</a>
+        <form action="/albums/{{ album.id }}/delete" method="post" style="display:inline;">
+            <button type="submit" class="button" style="background-color: #e74c3c; color: white; margin-left: 5px;" onclick="return confirm('¿Estás seguro de eliminar este álbum?');">Eliminar</button>
+        </form>
       </td>
     </tr>
     {% endfor %}

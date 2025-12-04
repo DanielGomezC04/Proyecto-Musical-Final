@@ -103,3 +103,15 @@ def remove_favorite_artist(user_id: int, artist_id: int, session: Session = Depe
 
 
 
+
+@router.post("/{user_id}/delete", response_class=HTMLResponse)
+def delete_user(user_id: int, request: Request, session: Session = Depends(get_session)):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    session.delete(user)
+    session.commit()
+    
+    # Redirect to user list
+    return read_users(request, session)

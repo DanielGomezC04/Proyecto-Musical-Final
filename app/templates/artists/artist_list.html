@@ -33,6 +33,9 @@
       <td>{{ artist.genre }}</td>
       <td>
         <a href="/artists/{{ artist.id }}" class="button">Ver Detalles</a>
+        <form action="/artists/{{ artist.id }}/delete" method="post" style="display:inline;">
+            <button type="submit" class="button" style="background-color: #e74c3c; color: white; margin-left: 5px;" onclick="return confirm('¿Estás seguro de eliminar este artista?');">Eliminar</button>
+        </form>
       </td>
     </tr>
     {% endfor %}
