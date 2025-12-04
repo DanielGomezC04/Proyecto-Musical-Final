@@ -129,7 +129,7 @@ En render con `https://spotlist-6xna.onrender.com/songs/`.
 
 ### Consideraciones de Producción
 
-- **Base de datos**: SQLite para desarrollo, considerar PostgreSQL para producción
+- **Base de datos**: SQLite para desarrollo, Render 
 - **Imágenes**: Cloudinary maneja el almacenamiento en la nube
 - **HTTPS**: Render proporciona certificados SSL automáticos
 
