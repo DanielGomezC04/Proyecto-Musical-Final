@@ -45,322 +45,264 @@ El API de documentación estará en `http://127.0.0.1:8000/docs`.
 En render con `https://spotlist-6xna.onrender.com/songs/`.
 
 ```
-## Desarrollado por:
+## 📚 Tabla de Contenidos
+- [✨ Características](#-características)
+- [🛠️ Tecnologías](#-tecnologías)
+- [🏗️ Arquitectura](#-arquitectura)
+- [📊 Modelos de Datos](#-modelos-de-datos)
+- [🔌 Endpoints API](#-endpoints-api)
+- [📦 Instalación](#-instalación)
+- [⚙️ Configuración](#-configuración)
+- [🚀 Uso](#-uso)
+- [🌐 Despliegue](#-despliegue)
+- [📝 Estructura de Datos](#-estructura-de-datos)
+- [👨‍💻 Desarrollado por](#-desarrollado-por)
+- [📄 Licencia](#-licencia)
 
-- [Daniel Felipe Gomez Cordoba](https://github.com/DanielGomezC04)
+---
 
-##  Tabla de Contenidos
+## ✨ Características
 
-- [Características](#-características)
-- [Tecnologías](#-tecnologías)
-- [Arquitectura](#-arquitectura)
-- [Modelos de Datos](#-modelos-de-datos)
-- [Endpoints API](#-endpoints-api)
-- [Instalación](#-instalación)
-- [Configuración](#-configuración)
-- [Uso](#-uso)
-- [Despliegue](#-despliegue)
+- ✅ CRUD Completo para **Usuarios**, **Artistas**, **Álbumes** y **Canciones**
+- ⭐ Sistema de **Favoritos** (Usuarios ↔ Artistas / Usuarios ↔ Canciones)
+- 📤 Carga de imágenes con **Cloudinary**
+- 🖥️ Interfaz web con **HTML + Jinja2**
+- 🚀 API REST documentada automáticamente
+- 🗄️ Base de datos relacional con **SQLModel**
 
-##  Características
+---
 
--  **CRUD Completo** para Usuarios, Artistas, Álbumes y Canciones
--  **Sistema de Favoritos** (Usuarios ↔ Artistas, Usuarios ↔ Canciones)
--  **Carga de Imágenes** con Cloudinary
--  **Interfaz Web** con templates HTML
--  **API REST** documentada automáticamente
--  **Base de datos relacional** con Cloudinary
+## 🛠️ Tecnologías
 
-##  Tecnologías
+### 🔧 Backend
+- FastAPI  
+- SQLModel  
+- SQLite  
+- Uvicorn  
 
-### Backend
-- **FastAPI** - Framework web moderno y rápido
-- **SQLModel** - ORM basado en Pydantic y SQLAlchemy
-- **SQLite** - Base de datos (desarrollo)
-- **Uvicorn** - Servidor ASGI
+### 🎨 Frontend
+- Jinja2  
+- HTML / CSS  
 
-### Frontend
-- **Jinja2** - Motor de templates
-- **HTML/CSS** - Interfaz de usuario
+### ☁️ Servicios externos
+- Cloudinary  
 
-### Servicios Externos
-- **Cloudinary** - Almacenamiento de imágenes
+---
 
-##  Arquitectura
+## 🏗️ Arquitectura
 
-```
+```bash
 Spotlist/
 ├── app/
-│   ├── __init__.py
-│   ├── main.py              # Punto de entrada de la aplicación
-│   ├── config.py            # Configuración y variables de entorno
-│   ├── database.py          # Configuración de base de datos
+│   ├── main.py              # Entrada principal
+│   ├── config.py            # Config vars
+│   ├── database.py          # Conexión DB
 │   ├── models.py            # Modelos SQLModel
-│   ├── utils.py             # Utilidades (upload de imágenes)
-│   ├── routers/             # Endpoints API
+│   ├── utils.py             # Utilidades (Cloudinary)
+│   ├── routers/
 │   │   ├── users.py         # CRUD Usuarios + Favoritos
 │   │   ├── artists.py       # CRUD Artistas
 │   │   ├── albums.py        # CRUD Álbumes
 │   │   ├── songs.py         # CRUD Canciones
-│   │   └── storage.py       # Gestión de archivos
-│   ├── services/            # Lógica de negocio
-│   │   └── storage.py       # Servicio de Cloudinary
-│   ├── templates/           # Templates HTML
-│   │   ├── base.html
-│   │   ├── index.html
-│   │   ├── users/
-│   │   ├── artists/
-│   │   ├── albums/
-│   │   └── songs/
-│   └── static/              # Archivos estáticos (CSS, JS)
-├── .env                     # Variables de entorno
-├── requirements.txt         # Dependencias Python
-├── run.py                   # Script de ejecución
-└── database.db             # Base de datos SQLite
-```
-
-## 📊 Modelos de Datos
-
-### Diagrama de Relaciones
-
-```
+│   │   └── storage.py       # Storage
+│   ├── services/
+│   │   └── storage.py       # Lógica Cloudinary
+│   ├── templates/           # HTML
+│   └── static/              # CSS / JS
+├── .env
+├── requirements.txt
+├── run.py
+└── database.db
+📊 Modelos de Datos
+🔗 Diagrama de Relaciones
+mermaid
+Copiar código
+erDiagram
     User ||--o{ UserArtistLink : "tiene"
     Artist ||--o{ UserArtistLink : "es favorito de"
     User ||--o{ UserSongLink : "tiene"
     Song ||--o{ UserSongLink : "es favorito de"
     Artist ||--o{ Album : "crea"
     Album ||--o{ Song : "contiene"
-```
 
-### Relaciones
+    User {
+        int id PK
+        string username
+        string email
+        string image_url
+    }
+    
+    Artist {
+        int id PK
+        string name
+        string genre
+        string image_url
+    }
+    
+    Album {
+        int id PK
+        string name
+        int year
+        int artist_id FK
+        string image_url
+    }
+    
+    Song {
+        int id PK
+        string name
+        int duration
+        int album_id FK
+    }
+    
+    UserArtistLink {
+        int user_id FK
+        int artist_id FK
+    }
+    
+    UserSongLink {
+        int user_id FK
+        int song_id FK
+    }
+🔌 Endpoints API
+👤 Usuarios
+Método	Endpoint	Descripción
+GET	/users/	Listar usuarios
+GET	/users/{id}	Obtener usuario
+GET	/users/create	Formulario
+POST	/users/create	Crear usuario
+POST	/users/{id}/delete	Eliminar usuario
 
-1. **Artist → Albums** (Uno a Muchos)
-   - Un artista puede tener múltiples álbumes
-   
-2. **Album → Songs** (Uno a Muchos)
-   - Un álbum puede tener múltiples canciones
+⭐ Favoritos
+Método	Endpoint	Descripción
+POST	/users/{id}/favorites/{artist_id}	Agregar artista
+POST	/users/{id}/favorites/{artist_id}/delete	Quitar artista
+POST	/users/{id}/favorites/songs/{song_id}	Agregar canción
+POST	/users/{id}/favorites/songs/{song_id}/delete	Quitar canción
 
-3. **User ↔ Artists** (Muchos a Muchos - Favoritos)
-   - Un usuario puede tener múltiples artistas favoritos
-   - Un artista puede ser favorito de múltiples usuarios
-   - Tabla intermedia: `UserArtistLink`
+🎤 Artistas
+Método	Endpoint	Descripción
+GET	/artists/	Listar artistas
+GET	/artists/{id}	Obtener artista
+GET	/artists/create	Formulario
+POST	/artists/create	Crear artista
+POST	/artists/{id}/delete	Eliminar artista
 
-4. **User ↔ Songs** (Muchos a Muchos - Favoritos)
-   - Un usuario puede tener múltiples canciones favoritas
-   - Una canción puede ser favorita de múltiples usuarios
-   - Tabla intermedia: `UserSongLink`
+💿 Álbumes
+Método	Endpoint	Descripción
+GET	/albums/	Listar álbumes
+GET	/albums/{id}	Obtener álbum
+GET	/albums/create	Formulario
+POST	/albums/create	Crear álbum
+POST	/albums/{id}/delete	Eliminar álbum
 
-## 🔌 Endpoints API
+🎵 Canciones
+Método	Endpoint	Descripción
+GET	/songs/	Listar canciones
+GET	/songs/{id}	Obtener canción
+GET	/songs/create	Formulario
+POST	/songs/create	Crear canción
+POST	/songs/{id}/delete	Eliminar canción
 
-### Usuarios
+📦 Instalación
+1️⃣ Clonar
+bash
+Copiar código
+git clone <repo-url>
+cd Spotlist
+2️⃣ Crear entorno
+bash
+Copiar código
+python -m venv venv
+3️⃣ Activar
+Windows:
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| `GET` | `/users/` | Lista todos los usuarios |
-| `GET` | `/users/{user_id}` | Obtiene un usuario específico |
-| `GET` | `/users/create` | Formulario de creación |
-| `POST` | `/users/create` | Crea un nuevo usuario |
-| `POST` | `/users/{user_id}/delete` | Elimina un usuario |
+bash
+Copiar código
+.\venv\Scripts\activate
+Linux/Mac:
 
-### Favoritos
+bash
+Copiar código
+source venv/bin/activate
+4️⃣ Instalar dependencias
+bash
+Copiar código
+pip install -r requirements.txt
+⚙️ Configuración
+Crear archivo .env:
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| `POST` | `/users/{user_id}/favorites/{artist_id}` | Agrega artista a favoritos |
-| `POST` | `/users/{user_id}/favorites/{artist_id}/delete` | Elimina artista de favoritos |
-| `POST` | `/users/{user_id}/favorites/songs/{song_id}` | Agrega canción a favoritos |
-| `POST` | `/users/{user_id}/favorites/songs/{song_id}/delete` | Elimina canción de favoritos |
-
-### Artistas
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| `GET` | `/artists/` | Lista todos los artistas |
-| `GET` | `/artists/{artist_id}` | Obtiene un artista específico |
-| `GET` | `/artists/create` | Formulario de creación |
-| `POST` | `/artists/create` | Crea un nuevo artista |
-| `POST` | `/artists/{artist_id}/delete` | Elimina un artista |
-
-### Álbumes
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| `GET` | `/albums/` | Lista todos los álbumes |
-| `GET` | `/albums/{album_id}` | Obtiene un álbum específico |
-| `GET` | `/albums/create` | Formulario de creación |
-| `POST` | `/albums/create` | Crea un nuevo álbum |
-| `POST` | `/albums/{album_id}/delete` | Elimina un álbum |
-
-### Canciones
-
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| `GET` | `/songs/` | Lista todas las canciones |
-| `GET` | `/songs/{song_id}` | Obtiene una canción específica |
-| `GET` | `/songs/create` | Formulario de creación |
-| `POST` | `/songs/create` | Crea una nueva canción |
-| `POST` | `/songs/{song_id}/delete` | Elimina una canción |
-
-## 📦 Instalación
-
-### Requisitos Previos
-
-- Python 3.11 o superior
-- pip (gestor de paquetes de Python)
-- Git
-
-### Pasos
-
-1. **Clonar el repositorio**
-   ```bash
-   git clone <url-del-repositorio>
-   cd Spotlist
-   ```
-
-2. **Crear entorno virtual**
-   ```bash
-   python -m venv venv
-   ```
-
-3. **Activar entorno virtual**
-   - Windows:
-     ```bash
-     .\venv\Scripts\activate
-     ```
-   - macOS/Linux:
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. **Instalar dependencias**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## ⚙️ Configuración
-
-### Variables de Entorno
-
-Crear un archivo `.env` en la raíz del proyecto:
-
-```env
-# Base de datos
+env
+Copiar código
 database_url="sqlite:///./database.db"
 
-# Cloudinary (para imágenes)
-cloudinary_cloud_name="tu_cloud_name"
-cloudinary_api_key="tu_api_key"
-cloudinary_api_secret="tu_api_secret"
-```
+cloudinary_cloud_name="your_cloud"
+cloudinary_api_key="your_key"
+cloudinary_api_secret="your_secret"
+🚀 Uso
+Iniciar servidor
+bash
+Copiar código
+uvicorn app.main:app --reload
+Accesos
+🌐 Web: http://localhost:8000
 
-### Obtener Credenciales de Cloudinary
+📘 API Docs: http://localhost:8000/docs
 
-1. Crear cuenta en [Cloudinary](https://cloudinary.com/)
-2. Ir al Dashboard
-3. Copiar: Cloud Name, API Key, API Secret
-4. Pegar en el archivo `.env`
+🔵 Redoc: http://localhost:8000/redoc
 
-## 🚀 Uso
+🌐 Despliegue en Render
+Build Command:
 
-### Desarrollo Local
+bash
+Copiar código
+pip install -r requirements.txt
+Start Command:
 
-1. **Iniciar el servidor**
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-2. **Acceder a la aplicación**
-   - Interfaz web: `http://127.0.0.1:8000`
-   - Documentación API: `http://127.0.0.1:8000/docs`
-   - Documentación alternativa: `http://127.0.0.1:8000/redoc`
-
-### Flujo de Uso
-
-1. **Crear Artistas** → `/artists/create`
-2. **Crear Álbumes** → `/albums/create` (seleccionar artista)
-3. **Crear Canciones** → `/songs/create` (seleccionar álbum)
-4. **Crear Usuarios** → `/users/create`
-5. **Agregar Favoritos** → Ir a un usuario → Seleccionar artista/canción → Agregar
-
-## 🌐 Despliegue
-
-### Render
-
-1. **Crear cuenta en [Render](https://render.com/)**
-
-2. **Crear nuevo Web Service**
-   - Conectar repositorio de GitHub
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-
-3. **Configurar Variables de Entorno**
-   - Agregar las mismas variables del archivo `.env`
-
-4. **Desplegar**
-   - Render automáticamente desplegará la aplicación
-
-### Consideraciones de Producción
-
-- **Base de datos**: Considerar migrar a PostgreSQL para producción
-- **Imágenes**: Cloudinary maneja el almacenamiento en la nube
-- **HTTPS**: Render proporciona certificados SSL automáticos
-
-## 📝 Estructura de Datos
-
-### Usuario
-```json
+bash
+Copiar código
+uvicorn app.main:app --host 0.0.0.0 --port $PORT
+📝 Estructura de Datos
+Usuario
+json
+Copiar código
 {
   "id": 1,
   "username": "johndoe",
   "email": "john@example.com",
   "image_url": "https://cloudinary.com/...",
-  "favorite_artists": [...],
-  "favorite_songs": [...]
+  "favorite_artists": [],
+  "favorite_songs": []
 }
-```
-
-### Artista
-```json
+Artista
+json
+Copiar código
 {
   "id": 1,
   "name": "The Beatles",
   "genre": "Rock",
   "image_url": "https://cloudinary.com/...",
-  "albums": [...]
+  "albums": []
 }
-```
-
-### Álbum
-```json
+Álbum
+json
+Copiar código
 {
   "id": 1,
   "name": "Abbey Road",
   "year": 1969,
   "artist_id": 1,
   "image_url": "https://cloudinary.com/...",
-  "songs": [...]
+  "songs": []
 }
-```
-
-### Canción
-```json
+Canción
+json
+Copiar código
 {
   "id": 1,
   "name": "Come Together",
   "duration": 259,
   "album_id": 1
 }
-```
-
-## 👨‍💻 Desarrollado por
-
-**Daniel Felipe Gomez Cordoba**
-- GitHub: [@DanielGomezC04](https://github.com/DanielGomezC04)
-
-## 📄 Licencia
-
-Este proyecto es de código abierto y está disponible bajo la licencia MIT.
-
----
-
-**Nota**: Este proyecto fue desarrollado como parte de un ejercicio académico/profesional de desarrollo web con FastAPI.
-
+ Desarrollado por
+Daniel Felipe Gomez Cordoba
+GitHub: @DanielGomezC04
