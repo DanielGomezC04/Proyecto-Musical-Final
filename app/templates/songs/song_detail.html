@@ -3,11 +3,15 @@
 {% block title %}Detalle Canción - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1>Detalle de Canción</h1>
-<p><strong>ID:</strong> {{ song.id }}</p>
-<p><strong>Nombre:</strong> {{ song.name }}</p>
-<p><strong>Duración:</strong> {{ song.duration }} segundos</p>
-<p><strong>Álbum:</strong> <a href="/albums/{{ song.album_id }}">Ver Álbum</a></p>
+<div class="card detail-card">
+  <h1 class="page-title">Detalle de Canción</h1>
 
-<a href="/songs">Volver a la lista</a>
+  <p><strong>ID:</strong> {{ song.id }}</p>
+  <p><strong>Nombre:</strong> {{ song.name }}</p>
+  <p><strong>Duración:</strong> {{ song.duration }} segundos</p>
+  <p><strong>Álbum:</strong> <a href="/albums/{{ song.album_id }}">Ver Álbum</a></p>
+</div>
+
+<br>
+<a href="/songs" class="button">Volver a la lista</a>
 {% endblock %}

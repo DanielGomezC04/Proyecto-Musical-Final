@@ -3,18 +3,26 @@
 {% block title %}Crear Artista - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1>Crear Nuevo Artista</h1>
+<h1 class="page-title">Crear Nuevo Artista</h1>
 
-<form action="/artists/create" method="post">
-    <label for="name">Nombre:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
+<form action="/artists/create" method="post" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="name">Nombre</label>
+    <input type="text" id="name" name="name" required>
+  </div>
 
-    <label for="genre">Género:</label><br>
-    <input type="text" id="genre" name="genre" required><br><br>
+  <div class="form-group">
+    <label for="genre">Género</label>
+    <input type="text" id="genre" name="genre" required>
+  </div>
 
-    <button type="submit">Crear Artista</button>
+  <div class="form-group">
+    <label for="file">Foto del Artista</label>
+    <input type="file" id="file" name="file">
+  </div>
+
+  <button type="submit">Crear Artista</button>
 </form>
 
-<br>
-<a href="/artists/">Volver a la lista de artistas</a>
+<a href="/artists/" class="button">Volver a la lista de artistas</a>
 {% endblock %}

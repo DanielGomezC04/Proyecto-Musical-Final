@@ -3,28 +3,41 @@
 {% block title %}Álbumes - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1>Álbumes</h1>
-<a href="/albums/create" class="button">Crear Nuevo Álbum</a>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Año</th>
-            <th>Artista ID</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for album in albums %}
-        <tr>
-            <td>{{ album.id }}</td>
-            <td>{{ album.name }}</td>
-            <td>{{ album.year }}</td>
-            <td>{{ album.artist_id }}</td>
-            <td><a href="/albums/{{ album.id }}">Ver Detalles</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<div class="list-header">
+  <h1 class="page-title">Álbumes</h1>
+  <a href="/albums/create" class="button">Crear Nuevo Álbum</a>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Portada</th>
+      <th>Nombre</th>
+      <th>Año</th>
+      <th>Artista ID</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for album in albums %}
+    <tr>
+      <td>{{ album.id }}</td>
+      <td>
+        {% if album.image_url %}
+          <img src="{{ album.image_url }}" alt="Portada de {{ album.name }}" class="thumb-img">
+        {% else %}
+          Sin portada
+        {% endif %}
+      </td>
+      <td>{{ album.name }}</td>
+      <td>{{ album.year }}</td>
+      <td>{{ album.artist_id }}</td>
+      <td>
+        <a href="/albums/{{ album.id }}" class="button">Ver Detalles</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 {% endblock %}

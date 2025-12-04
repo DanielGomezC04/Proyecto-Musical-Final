@@ -3,26 +3,39 @@
 {% block title %}Usuarios - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1>Usuarios</h1>
-<a href="/users/create" class="button">Crear Nuevo Usuario</a>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td><a href="/users/{{ user.id }}">Ver Detalles</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<div class="list-header">
+  <h1 class="page-title">Usuarios</h1>
+  <a href="/users/create" class="button">Crear Nuevo Usuario</a>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Foto</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{ user.id }}</td>
+      <td>
+        {% if user.image_url %}
+          <img src="{{ user.image_url }}" alt="Foto de {{ user.username }}" class="thumb-img">
+        {% else %}
+          Sin foto
+        {% endif %}
+      </td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.email }}</td>
+      <td>
+        <a href="/users/{{ user.id }}" class="button">Ver Detalles</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 {% endblock %}

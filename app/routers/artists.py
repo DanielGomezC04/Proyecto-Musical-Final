@@ -1,12 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Form
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse
 from sqlmodel import Session, select
-from typing import List
+from typing import List, Optional
 from pathlib import Path
 from fastapi.templating import Jinja2Templates
 
 from ..database import get_session
 from ..models import Artist, ArtistCreate, ArtistRead
+from ..utils import upload_image
 
 # Configure templates
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
@@ -35,14 +36,17 @@ def create_artist_form(request: Request):
     return templates.TemplateResponse("artists/artist_create.html", {"request": request})
 
 @router.post("/create", response_class=HTMLResponse)
-def create_artist(
+async def create_artist(
     request: Request,
     name: str = Form(...),
     genre: str = Form(...),
+    file: UploadFile = File(None),
     session: Session = Depends(get_session)
 ):
+    image_url = await upload_image(file, bucket_name="artist_images")
     artist_data = ArtistCreate(name=name, genre=genre)
     db_artist = Artist.model_validate(artist_data)
+    db_artist.image_url = image_url
     
     session.add(db_artist)
     session.commit()

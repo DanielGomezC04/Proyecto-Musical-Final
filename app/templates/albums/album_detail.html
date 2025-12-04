@@ -3,18 +3,27 @@
 {% block title %}Detalle Álbum - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1>Detalle de Álbum</h1>
-<p><strong>ID:</strong> {{ album.id }}</p>
-<p><strong>Nombre:</strong> {{ album.name }}</p>
-<p><strong>Año:</strong> {{ album.year }}</p>
-<p><strong>Artista:</strong> <a href="/artists/{{ album.artist_id }}">Ver Artista</a></p>
+<div class="card detail-card">
+  <h1 class="page-title">Detalle de Álbum</h1>
 
-<h2>Canciones</h2>
-<ul>
+  {% if album.image_url %}
+    <img src="{{ album.image_url }}" alt="Portada de {{ album.name }}" class="cover-img-lg">
+    <br><br>
+  {% endif %}
+
+  <p><strong>ID:</strong> {{ album.id }}</p>
+  <p><strong>Nombre:</strong> {{ album.name }}</p>
+  <p><strong>Año:</strong> {{ album.year }}</p>
+  <p><strong>Artista:</strong> <a href="/artists/{{ album.artist_id }}">Ver Artista</a></p>
+
+  <h2>Canciones</h2>
+  <ul>
     {% for song in album.songs %}
     <li><a href="/songs/{{ song.id }}">{{ song.name }}</a> ({{ song.duration }}s)</li>
     {% endfor %}
-</ul>
+  </ul>
+</div>
 
-<a href="/albums">Volver a la lista</a>
+<br>
+<a href="/albums" class="button">Volver a la lista</a>
 {% endblock %}

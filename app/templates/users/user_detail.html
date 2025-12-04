@@ -3,17 +3,26 @@
 {% block title %}Detalle Usuario - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1>Detalle de Usuario</h1>
-<p><strong>ID:</strong> {{ user.id }}</p>
-<p><strong>Username:</strong> {{ user.username }}</p>
-<p><strong>Email:</strong> {{ user.email }}</p>
+<div class="card detail-card">
+  <h1 class="page-title">Detalle de Usuario</h1>
 
-<h2>Artistas Favoritos</h2>
-<ul>
+  {% if user.image_url %}
+    <img src="{{ user.image_url }}" alt="Foto de {{ user.username }}" class="cover-img-lg">
+    <br><br>
+  {% endif %}
+
+  <p><strong>ID:</strong> {{ user.id }}</p>
+  <p><strong>Username:</strong> {{ user.username }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+
+  <h2>Artistas Favoritos</h2>
+  <ul>
     {% for artist in user.favorite_artists %}
     <li><a href="/artists/{{ artist.id }}">{{ artist.name }}</a></li>
     {% endfor %}
-</ul>
+  </ul>
+</div>
 
-<a href="/users">Volver a la lista</a>
+<br>
+<a href="/users" class="button">Volver a la lista</a>
 {% endblock %}

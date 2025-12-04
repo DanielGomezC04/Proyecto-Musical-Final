@@ -32,6 +32,7 @@ class Album(AlbumBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     artist: Optional["Artist"] = Relationship(back_populates="albums")
     songs: List[Song] = Relationship(back_populates="album")
+    image_url: Optional[str] = Field(default=None)
 
 class AlbumCreate(AlbumBase):
     pass
@@ -49,6 +50,7 @@ class Artist(ArtistBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     albums: List[Album] = Relationship(back_populates="artist")
     fans: List["User"] = Relationship(back_populates="favorite_artists", link_model=UserArtistLink)
+    image_url: Optional[str] = Field(default=None)
 
 class ArtistCreate(ArtistBase):
     pass
@@ -65,6 +67,7 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     favorite_artists: List[Artist] = Relationship(back_populates="fans", link_model=UserArtistLink)
+    image_url: Optional[str] = Field(default=None)
 
 class UserCreate(UserBase):
     pass

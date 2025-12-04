@@ -3,28 +3,33 @@
 {% block title %}Canciones - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1>Canciones</h1>
-<a href="/songs/create" class="button">Crear Nueva Canción</a>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Duración (s)</th>
-            <th>Álbum ID</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for song in songs %}
-        <tr>
-            <td>{{ song.id }}</td>
-            <td>{{ song.name }}</td>
-            <td>{{ song.duration }}</td>
-            <td>{{ song.album_id }}</td>
-            <td><a href="/songs/{{ song.id }}">Ver Detalles</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
+<div class="list-header">
+  <h1 class="page-title">Canciones</h1>
+  <a href="/songs/create" class="button">Crear Nueva Canción</a>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Duración (s)</th>
+      <th>Álbum ID</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for song in songs %}
+    <tr>
+      <td>{{ song.id }}</td>
+      <td>{{ song.name }}</td>
+      <td>{{ song.duration }}</td>
+      <td>{{ song.album_id }}</td>
+      <td>
+        <a href="/songs/{{ song.id }}" class="button">Ver Detalles</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 {% endblock %}

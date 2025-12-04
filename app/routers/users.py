@@ -1,12 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Form
+from fastapi import APIRouter, Depends, HTTPException, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse
 from sqlmodel import Session, select
-from typing import List
+from typing import List, Optional
 from pathlib import Path
 from fastapi.templating import Jinja2Templates
 
 from ..database import get_session
 from ..models import User, UserCreate, UserRead, Artist, UserArtistLink
+from ..utils import upload_image
 
 # Configure templates
 templates = Jinja2Templates(directory=str(Path(__file__).parent.parent / "templates"))
@@ -35,14 +36,17 @@ def create_user_form(request: Request):
     return templates.TemplateResponse("users/user_create.html", {"request": request})
 
 @router.post("/create", response_class=HTMLResponse)
-def create_user(
+async def create_user(
     request: Request,
     username: str = Form(...),
     email: str = Form(...),
+    file: UploadFile = File(None),
     session: Session = Depends(get_session)
 ):
+    image_url = await upload_image(file, bucket_name="profile_images")
     user_data = UserCreate(username=username, email=email)
     db_user = User.model_validate(user_data)
+    db_user.image_url = image_url
     
     session.add(db_user)
     session.commit()

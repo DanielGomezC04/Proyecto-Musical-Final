@@ -3,25 +3,30 @@
 {% block title %}Crear Canción - Proyecto Musical{% endblock %}
 
 {% block content %}
-<h1>Crear Nueva Canción</h1>
+<h1 class="page-title">Crear Nueva Canción</h1>
 
 <form action="/songs/create" method="post">
-    <label for="name">Nombre:</label><br>
-    <input type="text" id="name" name="name" required><br><br>
+  <div class="form-group">
+    <label for="name">Nombre</label>
+    <input type="text" id="name" name="name" required>
+  </div>
 
-    <label for="duration">Duración (segundos):</label><br>
-    <input type="number" id="duration" name="duration" required><br><br>
+  <div class="form-group">
+    <label for="duration">Duración (segundos)</label>
+    <input type="number" id="duration" name="duration" required>
+  </div>
 
-    <label for="album_id">Álbum:</label><br>
+  <div class="form-group">
+    <label for="album_id">Álbum</label>
     <select id="album_id" name="album_id" required>
-        {% for album in albums %}
-        <option value="{{ album.id }}">{{ album.name }}</option>
-        {% endfor %}
-    </select><br><br>
+      {% for album in albums %}
+      <option value="{{ album.id }}">{{ album.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
 
-    <button type="submit">Crear Canción</button>
+  <button type="submit">Crear Canción</button>
 </form>
 
-<br>
-<a href="/songs/">Volver a la lista de canciones</a>
+<a href="/songs/" class="button">Volver a la lista de canciones</a>
 {% endblock %}

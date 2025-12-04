@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from .database import create_db_and_tables
 from .routers import users, artists, albums, songs, storage
 
@@ -14,6 +15,8 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
 
 app.include_router(users.router)
 app.include_router(artists.router)
